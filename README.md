@@ -1,13 +1,12 @@
-# Code-Lab-2-Embedded
-STM32 interactive light monitor using ADC, joystick, photoresistor, UART, debouncing, and hysteresis.
-
 # COE411 Lab 2 - Analog Sensors and Interactive Light Monitor
 
 ## Project Description
 
-This project uses an STM32 Nucleo-L476RG, a joystick, and a photoresistor to make an interactive light monitor.
+This project uses an STM32 Nucleo-L476RG, a joystick, and a photoresistor to make an interactive light monitoring system.
 
-The joystick X-axis is used to control the light threshold. The joystick button is used to switch the system between ARMED and DISARMED. The photoresistor measures the light level, and the onboard LED is used as the alarm.
+The joystick X-axis is used to control the light threshold. The joystick button is used to switch the system between ARMED and DISARMED.
+
+The photoresistor measures the light level, and the onboard LED is used as the alarm.
 
 The system also sends the current values through USART2 so they can be seen on a serial terminal.
 
@@ -41,11 +40,11 @@ When the joystick button is pressed, the system changes between ARMED and DISARM
 
 When the system is DISARMED, the LED stays OFF.
 
-When the system is ARMED, the light sensor value is compared with the threshold and the LED turns ON or OFF depending on the light level.
+When the system is ARMED, the light sensor value is compared with the threshold.
 
-Debouncing is used so that one real button press is only detected once.
+Depending on the light level and the selected threshold, the LED turns ON or OFF.
 
-Hysteresis is used so that the LED does not keep switching ON and OFF when the light value is close to the threshold.
+The system also uses debouncing and hysteresis to make the behavior more stable.
 
 ## UART Output
 
@@ -62,11 +61,19 @@ LIGHT=2863 THR=1984 STATE=ARMED ALARM=OFF
 
 ## Debouncing
 
-Debouncing makes the button more reliable because one physical press can quickly switch between HIGH and LOW more than once. The 250 ms lockout makes sure that one real press only changes the system state once.
+Debouncing makes the button more reliable because one physical button press can quickly switch between HIGH and LOW multiple times.
+
+The 250 ms lockout makes sure that one real button press only changes the system state once.
+
+Without debouncing, one button press could be detected as multiple presses.
 
 ## Hysteresis
 
-Hysteresis makes the light alarm more reliable because the sensor value can move slightly up and down when it is close to the threshold. Using two different switching limits stops the LED from turning ON and OFF very quickly.
+Hysteresis makes the light alarm more reliable because the sensor value can slightly move up and down when it is close to the threshold.
+
+Two different switching limits are used around the threshold.
+
+This stops the LED from turning ON and OFF very quickly when the light value is close to the threshold.
 
 ## Development Stages
 
@@ -74,17 +81,22 @@ The project was developed in three main stages.
 
 ### 1. Base ADC Readings
 
-- Read the joystick values.
+- Read the joystick X value.
+- Read the joystick Y value.
 - Read the photoresistor value.
-- Display the sensor readings through UART.
+- Display the readings through UART.
 
 ### 2. Interactive Monitor
 
-- Added the threshold using joystick X.
+- Added threshold control using joystick X.
 - Added ARMED and DISARMED states.
-- Added LED control.
+- Added joystick button control.
+- Added LED alarm control.
+- Added UART output for the threshold and system state.
 
 ### 3. Refinements
 
 - Added button debouncing.
-- Added hysteresis to make the LED more stable.
+- Added hysteresis.
+- Added alarm state to the UART output.
+- Improved the stability of the system.
